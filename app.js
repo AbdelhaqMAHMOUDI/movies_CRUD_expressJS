@@ -1,9 +1,12 @@
 const express = require('express');
 const filmRoutes = require('./routes/filmRoutes');
+const categorieRoutes = require('./routes/categorieRoute');
 const acceptFormatMiddleware = require('./middlewares/acceptFormatMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const sequelize = require('./config/db');
 
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
@@ -20,6 +23,18 @@ app.get('/test', (req, res) => {
 
 // Routes pour les films
 app.use('/films', filmRoutes);
+app.use('/categories', categorieRoutes);
+
+
+// Synchronisation avec la base de données
+sequelize.sync({ force: false }) // Utilisez force: true uniquement pour la première synchronisation pour créer la table, puis passez à false pour les synchronisations ultérieures
+  .then(() => {
+    console.log('Tables synchronisées avec succès');
+  })
+  .catch(err => {
+    console.error('Erreur lors de la synchronisation des tables :', err);
+  });
+
 
 // Gestion des erreurs
 app.use((err, req, res, next) => {

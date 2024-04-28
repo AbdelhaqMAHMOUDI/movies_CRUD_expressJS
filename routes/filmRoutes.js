@@ -10,6 +10,11 @@ router.get('/validationImpossible',  validationMiddleware);
 // Récupération de tous les films
 router.get('/', filmController.getAllFilms);
 
+
+
+router.get('/search', filmController.searchFilms);
+
+
 // Récupération d'un film par son ID
 router.get('/:id', filmController.getFilmById);
 
@@ -22,6 +27,8 @@ router.put('/:id', filmController.updateFilm);
 // Suppression d'un film
 router.delete('/:id', filmController.deleteFilm);
 
+// route pour obtenir les categories associées à un film 
+router.get('/:id/categories', filmController.getFilmCategories);
 
 
 
